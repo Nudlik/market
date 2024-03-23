@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from backend_django.config.yasg import schema_view
+from config.yasg import schema_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
