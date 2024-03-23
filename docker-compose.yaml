@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   frontend:
-    build: frontend_react/Dockerfile
+    build: frontend_react
     volumes:
       - frontend:/app/build
 
