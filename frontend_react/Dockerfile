@@ -7,3 +7,6 @@ RUN npm i
 COPY . ./
 RUN ls -la
 CMD npm run build
+
+ENV PUBLIC_URL='/'
+CMD npm install -g serve && serve -s build
