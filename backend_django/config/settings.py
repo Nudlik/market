@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 
     'users.apps.UsersConfig',
     'ads.apps.AdsConfig',
-    'redoc.apps.RedocConfig',
+    'redoc_tasks.apps.RedocConfig',
 
     'rest_framework',
     'djoser',
@@ -187,8 +187,4 @@ DJOSER = {
     'ACTIVATION_URL': '#/activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {},
-}
-
-SWAGGER_SETTINGS = {
-    'DEFAULT_API_URL': 'http://127.0.0.1:8000',  # Базовый URL вашего API
 }
