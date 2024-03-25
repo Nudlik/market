@@ -1,11 +1,11 @@
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAdminUser
-from rest_framework.response import Response
 
 from ads.models import Ad, Comment
 from ads.pagination import AdPagination
 from ads.permissions import IsAuthor
-from ads.serializers import AdSerializer, CommentSerializer, AdDetailSerializer
+from ads.serializers import AdSerializer, CommentSerializer, AdListSerializer
 from ads.yasg import ad_doc, comment_doc
 
 
@@ -21,15 +21,22 @@ class AdViewSet(viewsets.ModelViewSet):
         'partial_update': [IsAuthor | IsAdminUser],
         'destroy': [IsAuthor | IsAdminUser],
     }
-
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = AdDetailSerializer(instance)
-        return Response(serializer.data)
+    choice_serializer = {
+        'list': AdListSerializer,
+        'me': AdListSerializer,
+    }
 
     def get_permissions(self):
         self.permission_classes = self.perms_methods.get(self.action, self.permission_classes)
         return [permission() for permission in self.permission_classes]
+
+    def get_serializer_class(self):
+        return self.choice_serializer.get(self.action, self.serializer_class)
+
+    @action(detail=False, methods=['GET'])
+    def me(self, request, *args, **kwargs):
+        self.queryset.filter(author=request.user)
+        return super().list(request, *args, **kwargs)
 
 
 class CommentViewSet(viewsets.ModelViewSet):
