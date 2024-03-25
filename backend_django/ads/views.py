@@ -6,9 +6,12 @@ from ads.models import Ad, Comment
 from ads.pagination import AdPagination
 from ads.permissions import EmailOwner
 from ads.serializers import AdSerializer, CommentSerializer, AdDetailSerializer
+from ads.yasg import ad_doc, comment_doc
 
 
 class AdViewSet(viewsets.ModelViewSet):
+    __doc__ = ad_doc
+
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
     pagination_class = AdPagination
@@ -30,6 +33,8 @@ class AdViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
+    __doc__ = comment_doc
+
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     perms_methods = {

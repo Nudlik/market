@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     'users',
     'ads',
+    'redoc',
 
     'rest_framework',
     'djoser',
