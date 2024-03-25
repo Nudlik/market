@@ -30,3 +30,6 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
+
+    def __str__(self):
+        return f'{self.ad} - {self.author}: {self.text[:20]}'
