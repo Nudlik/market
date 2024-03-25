@@ -5,7 +5,7 @@ from ads.views import AdViewSet, CommentViewSet
 
 router = DefaultRouter()
 router.register('ads', AdViewSet, basename='ads')
-router.register('comments', CommentViewSet, basename='comments')
+router.register('ads/(?P<ad_pk>[^/.]+)/comments', CommentViewSet, basename='comments')
 
 urlpatterns = [
     path('', include(router.urls)),
