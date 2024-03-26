@@ -83,5 +83,15 @@ class CommentSerializer(serializers.ModelSerializer):
         return obj.ad.id if hasattr(obj, 'ad') else None
 
     def get_author_image(self, obj):
-        if hasattr(obj.author, 'image') and obj.author.image:
-            return obj.author.image
+        try:
+            return obj.author.image.url
+        except (AttributeError, ValueError):
+            return None
+
+    def save(self, **kwargs):
+        self.validated_data['author'] = self.context['request'].user
+        self.validated_data['ad_id'] = self.context['request'].stream.resolver_match.kwargs['ad_pk']
+        comment = self.Meta.model.objects.create(**self.validated_data)
+        comment.save()
+        self.instance = comment
+        return comment
