@@ -22,8 +22,13 @@ class Ad(models.Model):
 
 
 class Comment(models.Model):
-    text = models.TextField(verbose_name='Текст комментария')
-    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='Автор')
+    text = models.TextField(verbose_name='Текст отзыва')
+    author = models.ForeignKey(
+        to=get_user_model(),
+        on_delete=models.CASCADE,
+        related_name='comments',
+        verbose_name='Автор'
+    )
     ad = models.ForeignKey('Ad', on_delete=models.CASCADE, related_name='comments', verbose_name='Объявление')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
 

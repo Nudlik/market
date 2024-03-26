@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAdminUser
 
 from ads.models import Ad, Comment
-from ads.pagination import AdPagination
+from ads.pagination import AdPagination, CommentPagination
 from ads.permissions import IsAuthor
 from ads.serializers import AdSerializer, CommentSerializer, AdListSerializer
 from ads.yasg import ad_doc, comment_doc
@@ -44,6 +44,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    pagination_class = CommentPagination
     perms_methods = {
         'update': [IsAuthor | IsAdminUser],
         'partial_update': [IsAuthor | IsAdminUser],
