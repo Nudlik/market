@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAdminUser
 
 from ads.models import Ad, Comment
@@ -58,3 +59,6 @@ class CommentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         ad_pk = self.kwargs.get('ad_pk')
         return self.queryset.filter(ad_id=ad_pk)
+
+    def get_object(self):
+        return get_object_or_404(self.get_queryset(), pk=self.kwargs.get('pk'))

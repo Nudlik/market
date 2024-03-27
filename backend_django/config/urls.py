@@ -23,7 +23,7 @@ from config.yasg import schema_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('users.urls')),
+    path('api/', include('users.urls')),
     path('api/', include('ads.urls')),
 
     path('api/redoc-tasks/', include('redoc_tasks.urls')),

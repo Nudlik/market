@@ -1,10 +1,16 @@
 from django.urls import include, path
 from djoser.views import UserViewSet
+
 from rest_framework.routers import SimpleRouter
+
+from users import views
 
 router = SimpleRouter()
 router.register(r'users', UserViewSet, basename='users')
 
 urlpatterns = [
     path('', include(router.urls)),
+
+    path('token/', views.TokenCreateView.as_view(), name='token-create'),
+    path('refresh/', views.TokenUpdateView.as_view(), name='token-refresh'),
 ]
