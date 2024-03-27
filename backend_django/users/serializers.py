@@ -4,14 +4,26 @@ from rest_framework import serializers
 
 
 class UserRegistrationSerializer(BaseUserRegistrationSerializer):
-
     class Meta:
         model = get_user_model()
-        fields = '__all__'
+        fields = [
+            'email',
+            'first_name',
+            'last_name',
+            'password',
+            'phone',
+            'image',
+        ]
 
 
-class CurrentUserSerializer(serializers.ModelSerializer):
-
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = '__all__'
+        fields = [
+            'first_name',
+            'last_name',
+            'phone',
+            'id',
+            'email',
+            'image',
+        ]
