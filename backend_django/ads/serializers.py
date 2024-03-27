@@ -91,7 +91,12 @@ class CommentSerializer(serializers.ModelSerializer):
     def save(self, **kwargs):
         self.validated_data['author'] = self.context['request'].user
         self.validated_data['ad_id'] = self.context['request'].stream.resolver_match.kwargs['ad_pk']
-        comment = self.Meta.model.objects.create(**self.validated_data)
-        comment.save()
+
+        if pk := self.data.get('pk'):
+            self.validated_data['pk'] = pk
+        comment, created = self.Meta.model.objects.update_or_create(pk=pk, defaults=self.validated_data)
+        if not created:
+            comment.save()
+
         self.instance = comment
         return comment
