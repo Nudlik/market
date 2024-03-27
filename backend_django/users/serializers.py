@@ -4,7 +4,9 @@ from rest_framework import serializers
 
 
 class UserRegistrationSerializer(BaseUserRegistrationSerializer):
+
     class Meta:
+        ref_name = 'CustomRegistrationSerializer'
         model = get_user_model()
         fields = [
             'email',
@@ -17,7 +19,9 @@ class UserRegistrationSerializer(BaseUserRegistrationSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+
     class Meta:
+        ref_name = 'CustomUserSerializer'
         model = get_user_model()
         fields = [
             'first_name',

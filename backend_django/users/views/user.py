@@ -3,10 +3,28 @@ from rest_framework.permissions import AllowAny, IsAdminUser
 
 from ads.permissions import IsAuthor
 from users.pagination import UserPagination
-from users.serializers import UserSerializer
+from users.serializers import UserSerializer, UserRegistrationSerializer
 
 
-class UserViewSet(views.UserViewSet):
+class OverrideMethodsMeta(type):
+    set_none = {
+        'activation',
+        'resend_activation',
+        'set_username',
+        'reset_username',
+        'reset_username_confirm',
+    }
+
+    def __new__(mcs, name, bases, dct):
+        for base in bases:
+            for attr_name in dir(base):
+                attr = getattr(base, attr_name)
+                if callable(attr) and not attr_name.startswith("__") and attr_name in mcs.set_none:
+                    dct[attr_name] = lambda self, *args, **kwargs: None
+        return super().__new__(mcs, name, bases, dct)
+
+
+class UserViewSet(views.UserViewSet, metaclass=OverrideMethodsMeta):
     pagination_class = UserPagination
     perms_methods = {
         'create': [AllowAny],
@@ -15,14 +33,20 @@ class UserViewSet(views.UserViewSet):
         'destroy': [IsAuthor | IsAdminUser],
     }
     choice_serializer = {
+        'create': UserRegistrationSerializer,
         'list': UserSerializer,
         'me': UserSerializer,
         'retrieve': UserSerializer,
     }
 
     def get_permissions(self):
-        self.permission_classes = self.perms_methods.get(self.action, self.permission_classes)
-        return [permission() for permission in self.permission_classes]
+        permission_ = self.perms_methods.get(self.action)
+        if permission_ is None:
+            return super().get_permissions()
+        return [permission() for permission in permission_]
 
     def get_serializer_class(self):
-        return self.choice_serializer.get(self.action, self.serializer_class)
+        serializer = self.choice_serializer.get(self.action)
+        if serializer is None:
+            return super().get_serializer_class()
+        return serializer
