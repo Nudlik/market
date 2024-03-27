@@ -74,17 +74,29 @@ class CommentSerializer(serializers.ModelSerializer):
         ]
 
     def get_author_first_name(self, obj):
-        return obj.author.first_name if hasattr(obj, 'author') else None
+        if isinstance(obj, self.Meta.model):
+            return obj.author.first_name if hasattr(obj, 'author') else None
+        if isinstance(obj, dict):
+            return obj['author'].first_name
 
     def get_author_last_name(self, obj):
-        return obj.author.last_name if hasattr(obj, 'author') else None
+        if isinstance(obj, self.Meta.model):
+            return obj.author.last_name if hasattr(obj, 'author') else None
+        if isinstance(obj, dict):
+            return obj['author'].last_name
 
     def get_ad_id(self, obj):
-        return obj.ad.id if hasattr(obj, 'ad') else None
+        if isinstance(obj, self.Meta.model):
+            return obj.ad.id if hasattr(obj, 'ad') else None
+        if isinstance(obj, dict):
+            return obj['ad_id']
 
     def get_author_image(self, obj):
         try:
-            return obj.author.image.url
+            if isinstance(obj, self.Meta.model):
+                return obj.author.image.url
+            if isinstance(obj, dict):
+                return obj['author'].image.url
         except (AttributeError, ValueError):
             return None
 
