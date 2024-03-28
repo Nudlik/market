@@ -7,7 +7,7 @@ from users.models import User
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ['email', 'phone', 'first_name', 'last_name', 'role']
-    list_filter = ['is_staff', 'is_superuser', 'is_active', 'groups']
+    list_filter = ['is_active']
     search_fields = ['first_name', 'last_name', 'email']
     exclude = ['password']
     filter_horizontal = [

@@ -8,12 +8,17 @@ from django.utils.translation import gettext_lazy as _
 from utils.const import NULLABLE
 
 
+class UserRoles(models.TextChoices):
+    ADMIN = 'admin', _('Администратор')
+    USER = 'user', _('Пользователь')
+
+
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
     def _create_user(self, email, password, **extra_fields):
         if not email:
-            raise ValueError('The given username must be set')
+            raise ValueError(_('Данное имя пользователя должно быть установлено'))
         email = self.normalize_email(email)
         GlobalUserModel = apps.get_model(
             self.model._meta.app_label,
@@ -28,23 +33,22 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
+        extra_fields.setdefault('role', UserRoles.USER)
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('role', UserRoles.ADMIN)
 
         if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
+            raise ValueError(_('Суперпользователь должен иметь is_staff=True.'))
         if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
+            raise ValueError(_('Суперпользователь должен иметь is_superuser=True.'))
+        if extra_fields.get('role') != UserRoles.ADMIN:
+            raise ValueError(_('Суперпользователь должен иметь role=admin.'))
 
         return self._create_user(email, password, **extra_fields)
-
-
-class UserRoles(models.TextChoices):
-    ADMIN = 'admin', _('Администратор')
-    USER = 'user', _('Пользователь')
 
 
 class User(AbstractUser):
@@ -64,3 +68,25 @@ class User(AbstractUser):
         verbose_name = _('user')
         verbose_name_plural = _('users')
         ordering = ['id']
+
+    @property
+    def is_admin(self):
+        return self.role == UserRoles.ADMIN
+
+    @property
+    def is_user(self):
+        return self.role == UserRoles.USER
+
+    @property
+    def is_superuser(self):
+        return self.is_admin
+
+    @property
+    def is_staff(self):
+        return self.is_admin
+
+    def has_perm(self, perm, obj=None):
+        return self.is_admin
+
+    def has_module_perms(self, app_label):
+        return self.is_admin
