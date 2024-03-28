@@ -56,7 +56,7 @@ class User(AbstractUser):
 
     email = models.EmailField(unique=True, verbose_name=_('Почта'))
     phone = models.CharField(max_length=35, verbose_name=_('Телефон'))
-    role = models.CharField(choices=UserRoles.choices, max_length=20, verbose_name=_('Роль'))
+    role = models.CharField(choices=UserRoles.choices, default=UserRoles.USER, max_length=20, verbose_name=_('Роль'))
     image = models.ImageField(upload_to='users_images/', **NULLABLE, verbose_name=_('Фото'))
 
     objects = UserManager()
@@ -76,14 +76,6 @@ class User(AbstractUser):
     @property
     def is_user(self):
         return self.role == UserRoles.USER
-
-    @property
-    def is_superuser(self):
-        return self.is_admin
-
-    @property
-    def is_staff(self):
-        return self.is_admin
 
     def has_perm(self, perm, obj=None):
         return self.is_admin
