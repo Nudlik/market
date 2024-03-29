@@ -1,8 +1,10 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAdminUser
 
+from ads.filters import AdFilerSet
 from ads.models import Ad, Comment
 from ads.pagination import AdPagination, CommentPagination
 from ads.permissions import IsAuthor
@@ -16,6 +18,8 @@ class AdViewSet(viewsets.ModelViewSet):
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
     pagination_class = AdPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = AdFilerSet
     perms_methods = {
         'list': [AllowAny],
         'update': [IsAuthor | IsAdminUser],
