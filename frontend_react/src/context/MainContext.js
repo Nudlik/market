@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext } from "react";
+import React, {useState, createContext, useContext} from "react";
 import axios from "axios";
 import useAxios from "../utils/useAxios";
 import AuthContext from "./AuthContext";
@@ -7,7 +7,7 @@ const MainContext = createContext();
 
 export default MainContext;
 
-export const MainContextStates = ({ children }) => {
+export const MainContextStates = ({children}) => {
   const [ads, setAds] = useState([]);
   const [isPopupNavigatorOpen, setIsPopupNavigatorOpen] = useState(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
@@ -15,7 +15,7 @@ export const MainContextStates = ({ children }) => {
   const [isUserPhotoPopupOpen, setIsUserPhotoPopupOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const api = useAxios();
-  let { authTokens } = useContext(AuthContext);
+  let {authTokens} = useContext(AuthContext);
   const BASE_URL = "http://127.0.0.1:8000/api";
   const BASE_URL_OPEN = `${BASE_URL}/ads/?`;
   const BASE_URL_ADS = `/api/ads/?`;
@@ -80,14 +80,14 @@ export const MainContextStates = ({ children }) => {
     const formData = new FormData();
     formData.append("image", image);
     return await axios
-      .patch(`${BASE_URL}/users/me/`, formData, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + String(authTokens.access),
-        },
-      })
-      .then(handleResponse);
+        .patch(`${BASE_URL}/users/me/`, formData, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + String(authTokens.access),
+          },
+        })
+        .then(handleResponse);
   };
   //comments
   const getComments = async (ad_pk) => {
@@ -165,7 +165,7 @@ export const MainContextStates = ({ children }) => {
   };
 
   //add new ad
-  const addAd = async ({ image, title, price, description }) => {
+  const addAd = async ({image, title, price, description}) => {
     const url = "http://127.0.0.1:8000/api/ads/";
     const formData = new FormData();
     formData.append("image", image);
@@ -173,14 +173,14 @@ export const MainContextStates = ({ children }) => {
     formData.append("price", `${price}`);
     formData.append("description", `${description}`);
 
-    return await await axios
-      .post(url, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + String(authTokens.access),
-        },
-      })
-      .then(handleResponseData);
+    return await axios
+        .post(url, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + String(authTokens.access),
+          },
+        })
+        .then(handleResponseData);
   };
 
   //edit ad
@@ -199,13 +199,13 @@ export const MainContextStates = ({ children }) => {
     const formData = new FormData();
     formData.append("image", image);
     return await axios
-      .patch(`${BASE_URL}/ads/${id}/`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + String(authTokens.access),
-        },
-      })
-      .then(handleResponse);
+        .patch(`${BASE_URL}/ads/${id}/`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + String(authTokens.access),
+          },
+        })
+        .then(handleResponse);
   };
 
   //delite add
@@ -254,6 +254,6 @@ export const MainContextStates = ({ children }) => {
   };
 
   return (
-    <MainContext.Provider value={mainData}>{children}</MainContext.Provider>
+      <MainContext.Provider value={mainData}>{children}</MainContext.Provider>
   );
 };
