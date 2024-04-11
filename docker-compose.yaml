@@ -3,8 +3,10 @@ version: '3.8'
 services:
 
   frontend:
+    env_file:
+      - .env
     build: frontend_react
-    command: npm run start
+    command: /bin/sh -c "${FRONTEND_CMD}"
     volumes:
       - frontend:/app/build
     ports:
@@ -13,21 +15,20 @@ services:
       - postgres
       - django
 
-#  nginx:
-#    image: nginx:alpine
-#    ports:
-#      - "8000:8000"
-#      - "3000:3000"
-#    volumes:
-#      - ./backend_django/static/:/usr/share/nginx/html/static/
-#      - ./backend_django/media/:/usr/share/nginx/html/media/
-#      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-#      - frontend:/usr/share/nginx/html/
-#    restart: always
-#    depends_on:
-#      - frontend
-#      - postgres
-#      - django
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./backend_django/static/:/usr/share/nginx/html/static/
+      - ./backend_django/media/:/usr/share/nginx/html/media/
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - frontend:/usr/share/nginx/html/
+    restart: always
+    depends_on:
+      - frontend
+      - postgres
+      - django
 
   postgres:
     image: postgres:16-alpine
@@ -54,7 +55,7 @@ services:
     volumes:
       - ./backend_django:/app
     ports:
-      - "8001:8000"
+      - "8000:8000"
     depends_on:
       - postgres
 
