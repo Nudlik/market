@@ -47,7 +47,7 @@ services:
         - "15432:5432"
 
   django:
-    build: .
+    build: backend_django
     tty: false
     command: /bin/sh -c "python manage.py migrate; python manage.py runserver 0.0.0.0:8000"
     env_file:
