@@ -15,17 +15,17 @@
   @media screen and (min-width: 1440px) {
     width: 1140px;
   }
-  @media screen and(min-width: 870px) and (max-width: 1140px) {
+  @media screen and (min-width: 870px) and (max-width: 1140px) {
     width: 800px;
     grid-template-columns: fit-content(300px) fit-content(360px);
     column-gap: 80px;
   }
-  @media screen and(min-width: 600px) and (max-width: 869px) {
+  @media screen and (min-width: 600px) and (max-width: 869px) {
     width: 100%;
     grid-template-columns: fit-content(300px) fit-content(auto);
     column-gap: 60px;
   }
-  @media screen and(max-width: 599px) {
+  @media screen and (max-width: 599px) {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -36,17 +36,17 @@
 
 .userProfile-area {
   width: 440px;
-  @media screen and(min-width: 966px) and (max-width: 1140px) {
+  @media screen and (min-width: 966px) and (max-width: 1140px) {
     width: 360px;
   }
-  @media screen and(min-width: 600px) and (max-width: 965px) {
+  @media screen and (min-width: 600px) and (max-width: 965px) {
     width: 250px;
   }
   @media screen and (max-width: 599px) {
     width: 100%;
     align-items: center;
   }
-  @media screen and(min-width: 500px) and (max-width: 599px) {
+  @media screen and (min-width: 500px) and (max-width: 599px) {
     padding: 0 20px;
   }
 }
