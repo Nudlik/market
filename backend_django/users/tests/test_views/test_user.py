@@ -7,6 +7,8 @@ from rest_framework import status
 class UserViewSetTestCase(TestCase):
 
     def setUp(self):
+        self.total_users = 2
+
         self.user = get_user_model().objects.create(email='1@1.ru', phone='+7123')
         self.user.set_password('1111')
         self.user.is_active = True
@@ -27,7 +29,7 @@ class UserViewSetTestCase(TestCase):
         url = reverse('users-list')
         response = self.client.post(url, data, 'application/json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(get_user_model().objects.count(), 2)
+        self.assertEqual(get_user_model().objects.count(), self.total_users + 1)
 
     def test_get_user(self):
         url = reverse('users-list')
@@ -90,7 +92,7 @@ class UserViewSetTestCase(TestCase):
         self.client.force_login(self.user)
         response = self.client.delete(url, data, 'application/json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(get_user_model().objects.count(), 0)
+        self.assertEqual(get_user_model().objects.count(), self.total_users - 1)
 
     def test_views_user(self):
         url = reverse('users-detail', args=[self.user.id])
