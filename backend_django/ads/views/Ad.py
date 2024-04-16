@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAdminUser
 
-from ads.filters import AdFilerSet
+from ads.filters import AdFilterSet
 from ads.models import Ad
 from ads.paginations import AdPagination
 
@@ -19,7 +19,7 @@ class AdViewSet(viewsets.ModelViewSet):
     serializer_class = AdSerializer
     pagination_class = AdPagination
     filter_backends = [DjangoFilterBackend]
-    filterset_class = AdFilerSet
+    filterset_class = AdFilterSet
     perms_methods = {
         'list': [AllowAny],
         'update': [IsAuthor | IsAdminUser],

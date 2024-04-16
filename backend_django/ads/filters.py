@@ -4,7 +4,7 @@ from django.db.models import Q
 from ads.models import Ad
 
 
-class AdFilerSet(django_filters.rest_framework.FilterSet):
+class AdFilterSet(django_filters.rest_framework.FilterSet):
     title = django_filters.CharFilter(field_name='title', lookup_expr='icontains')
     title_or_description = django_filters.CharFilter(
         method='title_or_description_',
