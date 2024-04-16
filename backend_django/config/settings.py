@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'redoc_tasks.apps.RedocConfig',
 
     'rest_framework',
+    'rest_framework.authtoken',
     'djoser',
     'corsheaders',
     'drf_yasg',

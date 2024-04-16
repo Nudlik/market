@@ -1,8 +1,8 @@
 from djoser import views
 from rest_framework.permissions import AllowAny, IsAdminUser
 
-from ads.permissions import IsAuthor
 from users.pagination import UserPagination
+from users.permissions import IsOwner
 from users.serializers import UserSerializer, UserRegistrationSerializer
 
 
@@ -28,9 +28,9 @@ class UserViewSet(views.UserViewSet, metaclass=OverrideMethodsMeta):
     pagination_class = UserPagination
     perms_methods = {
         'create': [AllowAny],
-        'update': [IsAuthor | IsAdminUser],
-        'partial_update': [IsAuthor | IsAdminUser],
-        'destroy': [IsAuthor | IsAdminUser],
+        'update': [IsOwner | IsAdminUser],
+        'partial_update': [IsOwner | IsAdminUser],
+        'destroy': [IsOwner | IsAdminUser],
     }
     choice_serializer = {
         'create': UserRegistrationSerializer,
