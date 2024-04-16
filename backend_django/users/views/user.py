@@ -37,6 +37,7 @@ class UserViewSet(views.UserViewSet, metaclass=OverrideMethodsMeta):
         'list': UserSerializer,
         'me': UserSerializer,
         'retrieve': UserSerializer,
+        'partial_update': UserSerializer,
     }
 
     def get_permissions(self):

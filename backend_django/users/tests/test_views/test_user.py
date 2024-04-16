@@ -12,6 +12,12 @@ class UserViewSetTestCase(TestCase):
         self.user.is_active = True
         self.user.save()
 
+        self.admin = get_user_model().objects.create(email='admin@admin.ru', phone='+7123')
+        self.admin.set_password('1111')
+        self.admin.is_active = True
+        self.admin.is_staff = True
+        self.admin.save()
+
     def test_create_user(self):
         data = {
             'email': 'test2@example.com',
@@ -49,6 +55,32 @@ class UserViewSetTestCase(TestCase):
         updated_user = get_user_model().objects.get(id=self.user.id)
         self.assertEqual(updated_user.first_name, 'My_first_name')
 
+    def test_update_user_bad(self):
+        user2 = get_user_model().objects.create(email='2@2.ru', phone='+7123')
+        user2.set_password('1111')
+        user2.is_active = True
+        user2.save()
+        data = {
+            'first_name': 'Your_first_name',
+        }
+        url = reverse('users-detail', args=[self.user.id])
+        self.client.force_login(user2)
+        response = self.client.patch(url, data, 'application/json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(self.user.first_name, '')
+
+    def test_update_user_admin(self):
+        data = {
+            'first_name': 'Your_first_name',
+        }
+        url = reverse('users-detail', args=[self.user.id])
+        self.client.force_login(self.admin)
+        response = self.client.patch(url, data, 'application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()['first_name'], 'Your_first_name')
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.first_name, 'Your_first_name')
+
     def test_delete_user(self):
         data = {
             'email': self.user.email,
@@ -59,3 +91,9 @@ class UserViewSetTestCase(TestCase):
         response = self.client.delete(url, data, 'application/json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(get_user_model().objects.count(), 0)
+
+    def test_views_user(self):
+        url = reverse('users-detail', args=[self.user.id])
+        self.client.force_login(self.user)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
