@@ -2,6 +2,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.response import Response
 
 from ads.filters import AdFilterSet
 from ads.models import Ad
@@ -40,5 +41,5 @@ class AdViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['GET'])
     def me(self, request, *args, **kwargs):
-        self.queryset.filter(author=request.user)
+        self.queryset = self.get_queryset().filter(author=request.user)
         return super().list(request, *args, **kwargs)
